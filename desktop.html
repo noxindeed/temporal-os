@@ -1,16 +1,51 @@
 <!DOCTYPE html>
-<html lang=""en">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>temporal desktop</title><title><style>
+<title>temporal desktop</title>
+<style>
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 body {
-  fr</style></title></title></head></html> # fiont-family: Tahoma, Arial, sans-serif;
+  font-family: Tahoma, Arial, sans-serif;
   font-size: 11px;
   background: #008080;
   width: 100vw; height: 100vh;
   overflow: hidden;
 }
-</style></head><body>
-<p style="color:white">hello</p>
-</body></html>
+.win {
+  position: absolute;
+  background: #c0c0c0;
+  border: 2px solid;
+  border-color: #dfdfdf #404040 #404040 #dfdfdf; /* wrong, fix later */
+  
+  box-shadow: 1px 1px 0 #808080;
+  min-width: 180px;
+}
+
+.tbar {
+  background: #000080;
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 3px 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 20px;
+}
+</style>
+</head>
+<body>
+<div class="win" style="left:200px;top:100px;width:300px;">
+  <div class="tbar">
+    <span>My Computer</span>
+    <div class="wbtns">
+      <div class="wbtn">_</div>
+      <div class="wbtn" style="font-size:9px">□</div>
+      <div class="wbtn">×</div>
+    </div>
+  </div>
+  <div style="padding:8px;">content here</div>
+</div>
+</body>
+</html>
