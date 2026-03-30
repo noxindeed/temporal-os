@@ -13,13 +13,24 @@ body {
   overflow: hidden;
 }
 .win {
-  position: absolute;
-  background: #c0c0c0;
-  border: 2px solid;
-  border-color: #dfdfdf #404040 #404040 #dfdfdf; /* wrong, fix later */
-  
+  border-color: #dfdfdf #404040 #404040 #dfdfdf;
   box-shadow: 1px 1px 0 #808080;
-  min-width: 180px;
+}
+
+.wbtns { display:flex; gap:2px; flex-shrink:0; }
+.wbtn {
+  width:16px; height:14px;
+  background:#c0c0c0;
+  border:1px solid;
+  border-color:#dfdfdf #404040 #404040 #dfdfdf;
+  font-size:8px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  font-family: monospace;
+}
+.wbtn:active {
+  border-color:#404040 #dfdfdf #dfdfdf #404040;
+  padding-top:1px;
 }
 
 .tbar {
