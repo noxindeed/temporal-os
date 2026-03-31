@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <title>temporal desktop</title>
 <style>
+
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
 body {
   font-family: Tahoma, Arial, sans-serif;
   font-size: 11px;
@@ -12,29 +14,19 @@ body {
   width: 100vw; height: 100vh;
   overflow: hidden;
 }
+
 .win {
+  position: absolute;
+  background: #c0c0c0;
+  /* the 3d border needs 4 values not 2 */
+  border: 2px solid;
   border-color: #dfdfdf #404040 #404040 #dfdfdf;
   box-shadow: 1px 1px 0 #808080;
-}
-
-.wbtns { display:flex; gap:2px; flex-shrink:0; }
-.wbtn {
-  width:16px; height:14px;
-  background:#c0c0c0;
-  border:1px solid;
-  border-color:#dfdfdf #404040 #404040 #dfdfdf;
-  font-size:8px;
-  display:flex; align-items:center; justify-content:center;
-  cursor:pointer;
-  font-family: monospace;
-}
-.wbtn:active {
-  border-color:#404040 #dfdfdf #dfdfdf #404040;
-  padding-top:1px;
+  min-width: 180px;
 }
 
 .tbar {
-  background: #000080;
+  background: linear-gradient(90deg, #000080, #1084d0);
   color: white;
   font-size: 11px;
   font-weight: bold;
@@ -44,19 +36,78 @@ body {
   justify-content: space-between;
   height: 20px;
 }
+
+.tbar.dim {
+  background: linear-gradient(90deg, #7a7a7a, #ababab);
+}
+
+.wbtns { display:flex; gap:2px; flex-shrink:0; }
+.wbtn {
+  width: 16px; height: 14px;
+  background: #c0c0c0;
+  border: 1px solid;
+  border-color: #dfdfdf #404040 #404040 #dfdfdf;
+  font-size: 8px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-family: monospace;
+}
+.wbtn:active {
+  border-color: #404040 #dfdfdf #dfdfdf #404040;
+  padding-top: 1px;
+}
+
+#taskbar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  height: 30px;
+  background: #c0c0c0;
+  border-top: 2px solid #dfdfdf;
+  display: flex; align-items: center;
+  padding: 2px 3px; gap: 2px;
+  z-index: 9000;
+}
+
+#startbtn {
+  height: 24px; padding: 0 10px;
+  background: #c0c0c0;
+  border: 2px solid;
+  border-color: #dfdfdf #404040 #404040 #dfdfdf;
+  font-weight: bold; font-size: 11px;
+  cursor: pointer;
+  display: flex; align-items: center;
+  gap: 5px;
+  font-family: Tahoma, sans-serif;
+}
+
+#startbtn.down {
+  border-color: #404040 #dfdfdf #dfdfdf #404040;
+  box-shadow: inset 1px 1px 0 #808080;
+}
+
+#tray {
+  margin-left: auto;
+}
+
 </style>
 </head>
 <body>
+
 <div class="win" style="left:200px;top:100px;width:300px;">
   <div class="tbar">
     <span>My Computer</span>
     <div class="wbtns">
       <div class="wbtn">_</div>
       <div class="wbtn" style="font-size:9px">□</div>
-      <div class="wbtn">×</div>
+      <div class="wbtn">✕</div>
     </div>
   </div>
   <div style="padding:8px;">content here</div>
 </div>
+
+<div id="taskbar">
+  <div id="startbtn">Start</div>
+  <div id="tray"></div>
+</div>
+
 </body>
 </html>
