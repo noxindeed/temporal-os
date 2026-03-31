@@ -94,6 +94,72 @@ body {
   font-size:11px; flex-shrink:0;
 }
 
+#smenu {
+  position:fixed; bottom:30px; left:0;
+  width:210px;
+  background:#c0c0c0;
+  border:2px solid;
+  border-color:#dfdfdf #404040 #404040 #dfdfdf;
+  z-index:9999;
+  display:none; flex-direction:row;
+}
+#smenu.open { display:flex; }
+.sm-strip {
+  /* this took ages -- had to look up writing-mode */
+  background: linear-gradient(to top, #000080, #1c44a0);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size:17px; font-weight:bold;
+  padding:8px 5px; letter-spacing:3px;
+  font-family:'Arial Black',sans-serif;
+  width:28px; flex-shrink:0;
+}
+.sm-rows { flex:1; display:flex; flex-direction:column; }
+.sm-row {
+  padding:6px 10px;
+  display:flex; align-items:center; gap:8px;
+  cursor:pointer; font-size:11px;
+}
+.sm-row:hover { background:#000080; color:white; }
+.sm-sep {
+  height:1px;
+  background:#808080; margin:3px 6px;
+  box-shadow:0 1px 0 #dfdfdf;
+}
+
+#smenu {
+  position:fixed; bottom:30px; left:0;
+  width:210px;
+  background:#c0c0c0;
+  border:2px solid;
+  border-color:#dfdfdf #404040 #404040 #dfdfdf;
+  z-index:9999;
+  display:none; flex-direction:row;
+}
+#smenu.open { display:flex; }
+.sm-strip {
+  /* this took ages -- had to look up writing-mode */
+  background: linear-gradient(to top, #000080, #1c44a0);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size:17px; font-weight:bold;
+  padding:8px 5px; letter-spacing:3px;
+  font-family:'Arial Black',sans-serif;
+  width:28px; flex-shrink:0;
+}
+.sm-rows { flex:1; display:flex; flex-direction:column; }
+.sm-row {
+  padding:6px 10px;
+  display:flex; align-items:center; gap:8px;
+  cursor:pointer; font-size:11px;
+}
+.sm-row:hover { background:#000080; color:white; }
+.sm-sep {
+  height:1px;
+  background:#808080; margin:3px 6px;
+  box-shadow:0 1px 0 #dfdfdf;
+}
+
 </style>
 </head>
 <body>
@@ -109,7 +175,6 @@ body {
   </div>
   <div style="padding:8px;">content here</div>
 </div>
-
 <div id="taskbar">
   <div id="startbtn">Start</div>
   <div id="tray"></div>
