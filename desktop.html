@@ -126,38 +126,20 @@ body {
   background:#808080; margin:3px 6px;
   box-shadow:0 1px 0 #dfdfdf;
 }
-
-#smenu {
-  position:fixed; bottom:30px; left:0;
-  width:210px;
-  background:#c0c0c0;
-  border:2px solid;
-  border-color:#dfdfdf #404040 #404040 #dfdfdf;
-  z-index:9999;
-  display:none; flex-direction:row;
+.icon {
+  position:absolute; width:72px;
+  display:flex; flex-direction:column;
+  align-items:center; gap:3px;
+  cursor:pointer; padding:4px;
+  border:1px dotted transparent;
+  user-select:none;
 }
-#smenu.open { display:flex; }
-.sm-strip {
-  /* this took ages -- had to look up writing-mode */
-  background: linear-gradient(to top, #000080, #1c44a0);
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  font-size:17px; font-weight:bold;
-  padding:8px 5px; letter-spacing:3px;
-  font-family:'Arial Black',sans-serif;
-  width:28px; flex-shrink:0;
-}
-.sm-rows { flex:1; display:flex; flex-direction:column; }
-.sm-row {
-  padding:6px 10px;
-  display:flex; align-items:center; gap:8px;
-  cursor:pointer; font-size:11px;
-}
-.sm-row:hover { background:#000080; color:white; }
-.sm-sep {
-  height:1px;
-  background:#808080; margin:3px 6px;
-  box-shadow:0 1px 0 #dfdfdf;
+.icon.sel { border-color:white; background:rgba(0,0,128,.3); }
+.icon svg { width:32px; height:32px; image-rendering:pixelated; }
+.icon span {
+  color:white; font-size:11px; text-align:center;
+  text-shadow: 1px 1px #000,-1px 1px #000,1px -1px #000,-1px -1px #000;
+  line-height:1.3; max-width:70px; word-break:break-word;
 }
 
 </style>
@@ -179,6 +161,24 @@ body {
   <div id="startbtn">Start</div>
   <div id="tray"></div>
 </div>
+
+<script>
+let smOpen = false;
+function toggleStart() {
+  smOpen = !smOpen;
+  document.getElementById('smenu').classList.toggle('open', smOpen);
+  document.getElementById('startbtn').classList.toggle('down', smOpen);
+}
+function closeStart() {
+  smOpen = false;
+  document.getElementById('smenu').classList.remove('open');
+  document.getElementById('startbtn').classList.remove('down');
+}
+document.getElementById('startbtn').addEventListener('click', toggleStart);
+document.addEventListener('click', e => {
+  if (smOpen && !e.target.closest('#smenu,#startbtn')) closeStart();
+});
+</script>
 
 </body>
 </html>
