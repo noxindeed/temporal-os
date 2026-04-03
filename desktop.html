@@ -194,6 +194,26 @@ body {
   font-size: 11px; padding: 6px; min-height: 180px; overflow-y: auto; line-height: 1.5;
 }
 
+#scanlines {
+  position:fixed; inset:0; pointer-events:none; z-index:8800; opacity:0;
+  background: repeating-linear-gradient(    to bottom,
+    transparent 0, transparent 1px,
+    rgba(0,0,0,.07) 1px, rgba(0,0,0,.07) 2px
+  );
+  transition: opacity 4s;
+}
+#vignette {
+  position:fixed; inset:0; pointer-events:none; z-index:8799; opacity:0;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.5) 100%);
+  transition: opacity 5s;
+}
+
+
+
+
+
+
+
 </style>
 </head>
 <body>
@@ -607,7 +627,8 @@ const badlog = [
 function tick() {
   if (dead) return;
   pct = Math.min(100, ((Date.now() - t0) / 1000 / DECAY_SECS) * 100);
-
+  if (pct>15) document.getElementById('scanlines').style.opacity = Math.min(.65,((pct-15)/85)*.65);
+  if (pct>10) document.getElementById('vignette').style.opacity = Math.min(.7,((pct-10)/90)*.7);
   // corrupt all [data-orig] labels
   if (pct > 12) {
     const rate = Math.pow((pct-12)/88, 2) * .55;
