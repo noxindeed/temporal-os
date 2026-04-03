@@ -223,6 +223,7 @@ body {
 </div>
 
 <script>
+let smOpen = false;
 function toggleStart() {
   smOpen = !smOpen;
   document.getElementById('smenu').classList.toggle('open', smOpen);
@@ -237,6 +238,35 @@ document.getElementById('startbtn').addEventListener('click', toggleStart);
 document.addEventListener('click', e => {
   if (smOpen && !e.target.closest('#smenu,#startbtn')) closeStart();
 });
+let zTop = 100;
+let focused = null;
+let wins = {};
+
+function show(id) {
+  const el = document.getElementById(id);
+  el.style.display = 'block';
+  el.classList.add('open');
+  front(el);
+  if (!wins[id]) { wins[id] = { min:false }; addtask(id); }
+  else wins[id].min = false;
+  focus(id);
+}
+
+function hide(id) {
+  document.getElementById(id).style.display = 'none';
+  document.getElementById(id).classList.remove('open');
+  delete wins[id];
+  rmtask(id);
+  refocus();
+}
+
+function min(id) {
+  document.getElementById(id).style.display = 'none';
+  if (wins[id]) wins[id].min = true;
+  refocus();
+}
+
+function front(el) { el.style.zIndex = ++zTop; }
 </script>
 
 </body>
