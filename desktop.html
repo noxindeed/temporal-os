@@ -271,11 +271,15 @@ function front(el) { el.style.zIndex = ++zTop; }
 let drag = { el:null };
 
 function makedraggable(win) {
+  win._drag = true;
   win.querySelector('.tbar').addEventListener('mousedown', e => {
-    drag.el = win;
-    drag.mx = e.clientX;
-    drag.my = e.clientY;
-    // should be storing initial offset here not mouse pos
+    if (e.target.classList.contains('.wbtns')) return; 
+    drag = {
+      el: win,
+      sx: e.clientX, sy: e.clientY,
+      ox: win.offsetLeft, oy: win.offsetTop
+    };
+    e.preventDefault();
 });
 }
 
@@ -285,7 +289,49 @@ document.addEventListener('mousemove', e => {
   drag.el.style.top  = e.clientY - drag.my + 'px'; // wrong
 });
 document.addEventListener('mouseup', () => drag.el = null);
-</script>
 
-</body>
-</html>
+const tlabels = {
+  'win-comp': 'My Computer',
+  'win-notes': 'journal.txt',
+  'win-log': 'system.log',
+  'win-bin': 'Recycle Bin',
+  'win-about': 'About'
+};
+
+function focus(id) {
+  if (focused && focused !== id) {
+    document.getElementById(focused)?.querySelector('.tbar')?.classList.add('dim');
+  }
+  focused = id;
+  document.getElementById(id)?.querySelector('.tbar')?.classList.remove('dim');
+  document.querySelectorAll('.tbtn').forEach(b => b.classList.toggle('on', b.dataset.id === id));
+}
+
+function refocus() {
+  let best = -1, bestId = null;
+  document.querySelectorAll('.win,.dlg').forEach(w => {
+    if (w.style.display !== 'none') {
+      const z = parseInt(w.style.zIndex) || 0;
+      if (z > best) { best = z; bestId = w.id; }
+    }
+  });
+  if (bestId) focus(bestId); else focused = null;
+}
+
+function addtask(id) {
+  const b = document.createElement('div');
+  b.className = 'tbtn';
+  b.dataset.id = id;
+  b.id = 'tb_' + id;
+  b.textContent = tlabels[id] || id;
+  b.onclick = () => {
+    if (wins[id]?.min) { show(id); }
+    else if (focused === id) { min(id); }
+    else { front(document.getElementById(id)); focus(id); }
+  };
+  document.getElementById('tasklist').appendChild(b);
+}
+
+function rmtask(id) {
+  document.getElementById('tb_' + id)?.remove();
+} 
