@@ -165,6 +165,8 @@ body {
 </style>
 </head>
 <body>
+
+<div class="win" style="left:200px;top:100px;width:300px;">
   <div class="tbar">
     <span>My Computer</span>
     <div class="wbtns">
@@ -396,7 +398,26 @@ logInit.forEach(e => {
   else { d.textContent = e.t; d.style.color = e.c; }
   logbox.appendChild(d);
 });
+
+const t0 = Date.now();
+const DECAY_SECS = 180;
+let pct = 0;
+let dead = false;
+
+const JUNK = 'abcdef\u2591\u2592\u2593\u2588\u2584\u2580\u25a0\u25a1\u2190\u2192\u25c6\u2660\u2663\u25d9\u263a\u2665\u266a\u2022';
+
+function mangle(str, rate) {
+  if (rate <= 0) return str;
+  return str.split('').map(c => c === ' ' || c === '\n' ? c : Math.random() < rate ? JUNK[Math.floor(Math.random()*JUNK.length)] : c).join('');
+}
+
+setInterval(tick, 500);
+
+function tick() {
+  if (dead) return;
+  pct = Math.min(100, ((Date.now() - t0) / 1000 / DECAY_SECS) * 100);
+}
 </script>
 
 </body>
-</html> 
+</html>
