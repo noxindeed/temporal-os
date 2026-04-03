@@ -373,6 +373,29 @@ maybe it's the fan. sounds different than it used to.`;
 
 document.getElementById('notepad').textContent = JOURNAL;
 
+const logInit = [
+  "[10:22:31] System initialized. All components OK.",
+  "[10:22:32] Loading desktop environment...",
+  "[10:22:33] Registry scan complete. No errors found.",
+  "[10:22:34] Desktop loaded in 1.2s",
+  "[10:24:11] Application launched: Notes.exe",
+  { t: "[10:31:05] WARNING: Low memory. Available: 14MB", c: "#dd0" },
+  "[10:31:06] Application closed: Notes.exe",
+  { t: "[10:44:23] Disk read error on sector 0x3F2A. Retrying...", c: "#d80" },
+  "[10:44:24] Disk read successful on retry.",
+  { t: "[10:51:17] WARNING: Temperature threshold. CPU 71C", c: "#dd0" },
+  "[10:55:02] System idle. Running background defrag.",
+  "[10:58:44] Defrag complete. 3% contiguous.",
+  "[11:03:10] Application launched: System.log"
+];
+
+const logbox = document.getElementById('logbox');
+logInit.forEach(e => {
+  const d = document.createElement('div');
+  if (typeof e === 'string') d.textContent = e;
+  else { d.textContent = e.t; d.style.color = e.c; }
+  logbox.appendChild(d);
+});
 </script>
 
 </body>
