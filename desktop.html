@@ -293,20 +293,20 @@ let drag = { el:null };
 function makedraggable(win) {
   win._drag = true;
   win.querySelector('.tbar').addEventListener('mousedown', e => {
-    if (e.target.classList.contains('.wbtns')) return; 
+    if (e.target.classList.contains('wbtn')) return;
     drag = {
       el: win,
       sx: e.clientX, sy: e.clientY,
       ox: win.offsetLeft, oy: win.offsetTop
     };
     e.preventDefault();
-});
+  });
 }
 
 document.addEventListener('mousemove', e => {
   if (!drag.el) return;
-  drag.el.style.left = e.clientX - drag.mx + 'px'; // wrong
-  drag.el.style.top  = e.clientY - drag.my + 'px'; // wrong
+  drag.el.style.left = (drag.ox + e.clientX - drag.sx) + 'px';
+  drag.el.style.top  = (drag.oy + e.clientY - drag.sy) + 'px';
 });
 document.addEventListener('mouseup', () => drag.el = null);
 
@@ -416,7 +416,34 @@ setInterval(tick, 500);
 function tick() {
   if (dead) return;
   pct = Math.min(100, ((Date.now() - t0) / 1000 / DECAY_SECS) * 100);
+
 }
+// hardcoded 
+const labelMap = [
+  { id:'lbl-mycomp', orig:'My Computer' },
+  { id:'lbl-docs',   orig:'My Documents' },
+  { id:'lbl-bin',    orig:'Recycle Bin' },
+  
+];
+
+function tick() {
+  pct = Math.min(100, ((Date.now() - t0) / 1000 / DECAY_SECS) * 100);
+  if (pct > 12) {
+    const rate = Math.pow((pct-12)/88, 2) * .55;
+    labelMap.forEach(t => {
+      const el = document.getElementById(t.id);
+      if (el) el.textContent = mangle(t.orig, rate);
+    });
+  }
+}
+
+
+
+
+
+
+
+
 </script>
 
 </body>
