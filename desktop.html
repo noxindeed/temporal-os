@@ -267,6 +267,24 @@ function min(id) {
 }
 
 function front(el) { el.style.zIndex = ++zTop; }
+// offset is wrong
+let drag = { el:null };
+
+function makedraggable(win) {
+  win.querySelector('.tbar').addEventListener('mousedown', e => {
+    drag.el = win;
+    drag.mx = e.clientX;
+    drag.my = e.clientY;
+    // should be storing initial offset here not mouse pos
+});
+}
+
+document.addEventListener('mousemove', e => {
+  if (!drag.el) return;
+  drag.el.style.left = e.clientX - drag.mx + 'px'; // wrong
+  drag.el.style.top  = e.clientY - drag.my + 'px'; // wrong
+});
+document.addEventListener('mouseup', () => drag.el = null);
 </script>
 
 </body>
