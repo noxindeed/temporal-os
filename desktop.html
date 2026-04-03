@@ -141,12 +141,30 @@ body {
   text-shadow: 1px 1px #000,-1px 1px #000,1px -1px #000,-1px -1px #000;
   line-height:1.3; max-width:70px; word-break:break-word;
 }
+.notes-body {
+  background:#fff; padding:4px 6px;
+  font-family:'Courier New',monospace;
+  font-size:12px; line-height:1.6;
+  white-space:pre; overflow:auto;
+  min-height:200px; outline:none;
+  width:100%; resize:none;
+}
+.exp-body {
+  padding:6px; background:#fff; display:flex; flex-wrap:wrap;
+  gap:8px; align-content:flex-start;
+  min-height:140px;
+}
+.exp-item {
+  width:62px; display:flex; flex-direction:column;
+  align-items:center; gap:3px;
+  cursor:pointer; padding:4px;
+  font-size:11px; text-align:center;
+}
+.exp-item:hover { background:#000080; color:white; }
 
 </style>
 </head>
 <body>
-
-<div class="win" style="left:200px;top:100px;width:300px;">
   <div class="tbar">
     <span>My Computer</span>
     <div class="wbtns">
@@ -334,4 +352,28 @@ function addtask(id) {
 
 function rmtask(id) {
   document.getElementById('tb_' + id)?.remove();
-} 
+}
+const JOURNAL = `nov 14
+
+had that dream again. the one with the hallway.
+woke up at 3:17 and couldn't go back. made coffee
+and watched the screensaver until it was light out.
+
+bought a new monitor cable today. the old one was
+giving me those lines on the left side of the screen.
+hope that fixes it.
+
+to do:
+- call mum back
+- finish the render before friday
+- return that library book (overdue since october)
+
+the machine has been running slow. defrag didn't help.
+maybe it's the fan. sounds different than it used to.`;
+
+document.getElementById('notepad').textContent = JOURNAL;
+
+</script>
+
+</body>
+</html> 
