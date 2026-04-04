@@ -58,9 +58,21 @@ body {
   padding-top: 1px;
 }
 .win.maxed {
-  left: 0 ; top: 0 ;
-  width: 100vw ; height: calc(100vh - 30px) ;
+  left: 0 !important; top: 0 !important;
+  width: 100vw !important; height: calc(100vh - 30px) !important;
   display: flex; flex-direction: column;
+}
+.win.maxed > .tbar,
+.win.maxed > .mbar,
+.win.maxed > .stbar {
+  flex: 0 0 auto;
+}
+.win.maxed > div:not(.tbar):not(.mbar):not(.stbar) {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
 }
 .win.maxed .exp-body,
 .win.maxed .notes-body,
@@ -189,7 +201,8 @@ body {
 .exp-body {
   padding: 6px; background: #fff; display: flex; flex-wrap: wrap;
   gap: 8px; align-content: flex-start;
-  min-height: 140px;
+  min-height: 0px;
+  height: 100%;
 }
 .exp-item {
   width: 62px; display: flex; flex-direction: column;
@@ -202,7 +215,7 @@ body {
 
 .log-body {
   background: #000; color: #0d0; font-family: 'Courier New', monospace;
-  font-size: 11px; padding: 6px; min-height: 180px; overflow-y: auto; line-height: 1.5;
+  font-size: 11px; padding: 6px; min-height: 0px; overflow-y: auto; line-height: 1.5;
 }
 
 #scanlines {
@@ -398,7 +411,7 @@ body.dying { animation:flkr 3s infinite; }
     </div>
     <div class="wbtns">
       <div class="wbtn" onclick="min('win-bin')">_</div>
-      <div class="wbtn" style="font-size:9px">□</div>
+      <div class="wbtn" style="font-size:9px"  onclick="maximize('win-bin')">□</div>
       <div class="wbtn" onclick="hide('win-bin')">✕</div>
     </div>
   </div>
