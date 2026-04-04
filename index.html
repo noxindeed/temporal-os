@@ -58,14 +58,17 @@ body {
   padding-top: 1px;
 }
 .win.maxed {
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 30px;
-  width: auto;
-  height: auto;
-} 
-
+  left: 0 ; top: 0 ;
+  width: 100vw ; height: calc(100vh - 30px) ;
+  display: flex; flex-direction: column;
+}
+.win.maxed .exp-body,
+.win.maxed .notes-body,
+.win.maxed .log-body {
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
 .mbar {
   background: #c0c0c0; display: flex;
   border-bottom: 1px solid #808080; padding: 0 2px;
@@ -597,11 +600,13 @@ function maximize(id) {
     const p = winPrev[id];
 el.style.left = p.l; el.style.top = p.t;
 el.style.width = p.w; el.style.height = p.h;
-    el.classList.remove('maxed');
-    wins[id].maxed = false;
+el.classList.remove('maxed');
+wins[id].maxed = false;
 } else {
     winPrev[id] = { l:el.style.left, t:el.style.top, w:el.style.width, h:el.style.height };
     el.classList.add('maxed');
+    el.style.left = ''; el.style.top = ''; el.style.width = ''; el.style.height = '';
+
     wins[id].maxed = true;
   }
 }
