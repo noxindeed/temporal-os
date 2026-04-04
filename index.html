@@ -366,7 +366,7 @@ body.dying { animation:flkr 3s infinite; }
         <div class="ditem" onclick="hide('win-comp');closeMenus()">Close</div>
       </div>
     </span>
-    <span onclick="toggleMenu('dd-comp-edit',event)">Edit>
+    <span onclick="toggleMenu('dd-comp-edit',event)">Edit 
       <div class="dropdown" id="dd-comp-edit">
         <div class="ditem disabled">Select All</div>
         <div class="ditem disabled">Invert Selection</div>
@@ -384,7 +384,7 @@ body.dying { animation:flkr 3s infinite; }
       <div class="dropdown" id="dd-comp-help">
         <div class="ditem disabled">Help Topics</div>
         <div class="dsep"></div>
-        <div class="ditem" onclick="closeMenus()">About Velion</div>
+        <div class="ditem" onclick="closeMenus()">About Temporal </div>
       </div>
     </span>
   </div>
@@ -423,13 +423,47 @@ body.dying { animation:flkr 3s infinite; }
     </div>
     <div class="wbtns">
       <div class="wbtn" onclick="min('win-notes')">_</div>
-      <div class="wbtn" style="font-size:9px" onclick = "maximize('win-notes')">□</div>
-      <div class="wbtn" onclick="hide('win-notes')">✕</div>
+      <div class="wbtn" style="font-size:9px" onclick = "maximize('win-notes')">□</div> # check      <div class="wbtn" onclick="hide('win-notes')">✕</div>
     </div>
   </div>
-  <div class="mbar"><span>File</span><span>Edit</span><span>Format</span><span>Help</span></div>
+  <div class="mbar">
+    <span onclick="toggleMenu('dd-notes-file',event)">File
+      <div class="dropdown" id="dd-notes-file">
+        <div class="ditem" onclick="document.getElementById('notepad').textContent='';closeMenus()">New</div>
+        <div class="dsep"></div>
+        <div class="ditem" onclick="hide('win-notes');closeMenus()">Exit</div>
+      </div>
+    </span>
+    <span onclick="toggleMenu('dd-notes-edit',event)">Edit
+      <div class="dropdown" id="dd-notes-edit">
+        <div class="ditem" onclick="document.execCommand('undo');closeMenus()">Undo</div>
+        <div class="dsep"></div>
+        <div class="ditem" onclick="document.execCommand('cut');closeMenus()">Cut</div>
+        <div class="ditem" onclick="document.execCommand('copy');closeMenus()">Copy</div>
+        <div class="ditem" onclick="document.execCommand('paste');closeMenus()">Paste</div>
+        <div class="ditem" onclick="document.execCommand('delete');closeMenus()">Delete</div>
+        <div class="dsep"></div>
+        <div class="ditem" onclick="selectAll();closeMenus()">Select All</div>
+      </div>
+    </span>
+    <span onclick="toggleMenu('dd-notes-format',event)">Format
+      <div class="dropdown" id="dd-notes-format">
+        <div class="ditem" id="wrap-item" onclick="toggleWrap();closeMenus()">Word Wrap</div>
+        <div class="ditem disabled">Font...</div>
+      </div>
+    </span>
+    <span onclick="toggleMenu('dd-notes-help',event)">Help
+      <div class="dropdown" id="dd-notes-help">
+        <div class="ditem disabled">Help Topics</div>
+        <div class="dsep"></div>
+        <div class="ditem" onclick="closeMenus()">About Notepad</div>
+      </div>
+    </span>
+  </div>
   <div style="padding:4px;">
     <div class="notes-body sunk" id="notepad" contenteditable="true" spellcheck="false"></div>
+  </div>
+
   </div>
   <div class="stbar">
     <div class="stpanel">Ln 1, Col 1</div>
@@ -468,7 +502,32 @@ body.dying { animation:flkr 3s infinite; }
       <div class="wbtn" onclick="hide('win-bin')">✕</div>
     </div>
   </div>
-  <div class="mbar"><span>File</span><span>Edit</span><span>View</span></div>
+  <div class="mbar">
+    <span onclick="toggleMenu('dd-bin-file',event)">File
+        <div class="dropdown" id="dd-bin-file">
+          <div class="ditem disabled">Empty Recycle Bin</div>
+          <div class="dsep"></div>
+          <div class="ditem" onclick="hide('win-bin');closeMenus()">Close</div>
+        </div>
+    </span>
+    <span onclick="toggleMenu('dd-bin-edit',event)">Edit
+      <div class="dropdown" id="dd-bin-edit">
+        <div class="ditem disabled">Select All</div>
+      </div>
+    </span>
+    <span onclick="toggleMenu('dd-bin-view',event)">View
+      <div class="dropdown" id="dd-bin-view">
+        <div class="ditem" onclick="closeMenus()">Large Icons</div>
+        <div class="ditem" onclick="closeMenus()">Small Icons</div>
+        <div class="ditem" onclick="closeMenus()">List</div>
+      </div>
+    </span>
+  </div>
+
+      
+
+
+</span>
   <div style="padding:6px;">
     <div class="sunk" style="background:#fff;min-height:110px;display:flex;align-items:center;justify-content:center;color:#808080;">The Recycle Bin is empty.</div>
   </div>
@@ -642,6 +701,23 @@ function refocus() {
   if (bestId) focus(bestId); else focused = null;
 }
 
+let wordWrap = false;
+
+function toggleWrap() {
+  wordWrap = !wordWrap;
+  document.getElementById('notepad').style.whiteSpace = wordWrap ? 'pre-wrap' : 'pre';
+  document.getElementById('wrap-item').textContent = (wordWrap ? '✓ ' : '') + 'Word Wrap';
+}
+
+function selectAll() {
+  const pad = document.getElementById('notepad');
+  pad.focus();
+  const range = document.createRange();
+  range.selectNodeContents(pad);
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+}
 document.addEventListener('mousedown', e => {
   const w = e.target.closest('.win');
   if (w) { front(w); focus(w.id); }
