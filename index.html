@@ -297,7 +297,7 @@ body.dying { animation:flkr 3s infinite; }
 </div>
 
 <!-- my computer -->
-<div class="win open" id="win-comp" style="left:200px;top:60px;width:400px;">
+<div class="win" id="win-comp" style="left:200px;top:60px;width:400px;">
   <div class="tbar">
     <div style="display:flex;align-items:center;gap:4px;overflow:hidden;white-space:nowrap;pointer-events:none;">
       <svg width="14" height="14" viewBox="0 0 16 16" style="image-rendering:pixelated;flex-shrink:0"><rect x="1" y="1" width="14" height="10" fill="#303030"/><rect x="2" y="2" width="12" height="8" fill="#000070"/><rect x="5" y="11" width="6" height="2" fill="#808080"/></svg>
@@ -510,8 +510,7 @@ setInterval(tick, 500);
 setInterval(clocktick, 1000);
 clocktick();
 
-// open my computer by default
-show('win-comp');
+
 
 // windows
 
@@ -573,7 +572,8 @@ function makedraggable(win) {
   win._drag = true;
   win.querySelector('.tbar').addEventListener('mousedown', e => {
     if (e.target.classList.contains('wbtn')) return;
-    drag = { el:win, sx:e.clientX, sy:e.clientY, ox:win.offsetLeft, oy:win.offsetTop };
+    const r = win.getBoundingClientRect();
+    drag = { el:win, sx:e.clientX, sy:e.clientY, ox:r.left, oy:r.top };
     e.preventDefault();
   });
 }
@@ -802,6 +802,8 @@ function bsod() {
   document.addEventListener('keydown', restart, { once:true });
 }
 
+// open my computer by default
+show('win-comp');
 </script>
 </body>
 </html>
