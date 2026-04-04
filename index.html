@@ -88,6 +88,32 @@ body {
 .mbar span { padding: 2px 8px; cursor: default; }
 .mbar span:hover { background: #000080; color: white; }
 
+.mbar span { position: relative; }
+
+.dropdown {
+  display: none;
+  position: absolute;
+  top: 100%; left: 0;
+  background: #c0c0c0;
+  border: 2px solid;
+  border-color: #dfdfdf #404040 #404040 #dfdfdf;
+  z-index: 8000;
+  min-width: 150px;
+  box-shadow: 2px 2px 0 #404040;
+}
+.dropdown.open { display: block; }
+
+.ditem {
+  padding: 3px 20px 3px 24px;
+  cursor: default;
+  white-space: nowrap;
+  font-size: 11px;
+}
+.ditem:hover { background: #000080; color: white; }
+.ditem.disabled { color: #808080; }
+.ditem.disabled:hover { background: transparent; color: #808080; cursor: default; }
+.dsep { height: 1px; background: #808080; margin: 3px 4px; box-shadow: 0 1px 0 #dfdfdf; }
+
 .sunk { border: 2px solid; border-color: #808080 #dfdfdf #dfdfdf #808080; }
 
 .stbar { display:flex; border-top:1px solid #808080; padding:2px 4px; gap:4px; background:#c0c0c0; }
@@ -333,8 +359,35 @@ body.dying { animation:flkr 3s infinite; }
       <div class="wbtn" onclick="hide('win-comp')">✕</div>
     </div>
   </div>
-  <div class="mbar"><span>File</span><span>Edit</span><span>View</span><span>Help</span></div>
-  <div style="padding:6px;">
+  <div class="mbar">
+    <span onclick="toggleMenu('dd-comp-file',event)">File
+      <div class="dropdown" id="dd-comp-file">
+        <div class="ditem" onclick="closeMenus()">New Window</div>
+        <div class="ditem" onclick="hide('win-comp');closeMenus()">Close</div>
+      </div>
+    </span>
+    <span onclick="toggleMenu('dd-comp-edit',event)">Edit>
+      <div class="dropdown" id="dd-comp-edit">
+        <div class="ditem disabled">Select All</div>
+        <div class="ditem disabled">Invert Selection</div>
+      </div>
+    </span>
+    <span onclick="toggleMenu('dd-comp-view',event)">View
+      <div class="dropdown" id="dd-comp-view">
+        <div class="ditem" onclick="closeMenus()">Large Icons</div>
+        <div class="ditem" onclick="closeMenus()">Small Icons</div>
+        <div class="ditem" onclick="closeMenus()">List</div>
+        <div class="ditem" onclick="closeMenus()">Details</div>
+      </div>
+    </span>
+    <span onclick="toggleMenu('dd-comp-help',event)">Help
+      <div class="dropdown" id="dd-comp-help">
+        <div class="ditem disabled">Help Topics</div>
+        <div class="dsep"></div>
+        <div class="ditem" onclick="closeMenus()">About Velion</div>
+      </div>
+    </span>
+  </div>
     <div class="exp-body sunk">
       <div class="exp-item">
         <svg viewBox="0 0 16 16"><rect x="3" y="5" width="10" height="8" fill="#c0c000"/><rect x="3" y="4" width="4" height="2" fill="#c0c000"/><rect x="4" y="6" width="8" height="6" fill="#e0e060"/></svg>
@@ -637,6 +690,25 @@ document.addEventListener('mousemove', e => {
   drag.el.style.top  = (drag.oy + e.clientY - drag.sy) + 'px';
 });
 document.addEventListener('mouseup', () => drag.el = null);
+
+// menus
+let openMenu = null;
+
+function toggleMenu(id, e) {
+  e.stopPropagation();
+  const dd = document.getElementById(id);
+  const wasOpen = dd.classList.contains('open');
+  closeMenus();
+  if (!wasOpen) { dd.classList.add('open'); openMenu = id; }
+}
+function closeMenus() {
+  document.querySelectorAll('.dropdown.open').forEach(d => d.classList.remove('open'));
+  openMenu = null;
+}
+document.addEventListener('click', () => closeMenus());
+
+
+
 
 // taskbar 
 
