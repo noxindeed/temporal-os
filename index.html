@@ -57,6 +57,14 @@ body {
   border-color: #404040 #dfdfdf #dfdfdf #404040;
   padding-top: 1px;
 }
+.win.maxed {
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 30px;
+  width: auto;
+  height: auto;
+} 
 
 .mbar {
   background: #c0c0c0; display: flex;
@@ -109,7 +117,7 @@ body {
   font-family:Tahoma,sans-serif; flex-shrink:0;
 }
 .tbtn.on { border-color:#808080 #dfdfdf #dfdfdf #808080; box-shadow:inset 1px 1px 0 #808080; background:#b8b8b8; }
-
+.tbtn.minimized { color: #808080; font-style: italic; }
 #tray {
   margin-left: auto;
   padding: 0 8px;
@@ -305,7 +313,7 @@ body.dying { animation:flkr 3s infinite; }
     </div>
     <div class="wbtns">
       <div class="wbtn" onclick="min('win-comp')">_</div>
-      <div class="wbtn" style="font-size:9px">□</div>
+      <div class="wbtn" style="font-size:9px" onclick="maximize('win-comp')">□</div>
       <div class="wbtn" onclick="hide('win-comp')">✕</div>
     </div>
   </div>
@@ -346,7 +354,7 @@ body.dying { animation:flkr 3s infinite; }
     </div>
     <div class="wbtns">
       <div class="wbtn" onclick="min('win-notes')">_</div>
-      <div class="wbtn" style="font-size:9px">□</div>
+      <div class="wbtn" style="font-size:9px" onclick = "maximize('win-notes')">□</div>
       <div class="wbtn" onclick="hide('win-notes')">✕</div>
     </div>
   </div>
@@ -369,7 +377,7 @@ body.dying { animation:flkr 3s infinite; }
     </div>
     <div class="wbtns">
       <div class="wbtn" onclick="min('win-log')">_</div>
-      <div class="wbtn" style="font-size:9px">□</div>
+      <div class="wbtn" style="font-size:9px" onclick="maximize('win-log')">□</div>
       <div class="wbtn" onclick="hide('win-log')">✕</div>
     </div>
   </div>
@@ -520,8 +528,12 @@ function show(id) {
   el.classList.add('open');
   front(el);
   if (!wins[id]) { wins[id] = { min:false }; addtask(id); }
-  else wins[id].min = false;
+  else {
+    wins[id].min = false;
+    document.getElementById('tb_' + id)?.classList.remove('minimized');
+  }
   focus(id);
+ 
   if (!el._drag) makedraggable(el);
 }
 
@@ -577,6 +589,29 @@ function makedraggable(win) {
     e.preventDefault();
   });
 }
+const winPrev = {};
+
+function maximize(id) {
+  const el = document.getElementById(id);
+  if (wins[id]?.maxed) {
+    const p = winPrev[id];
+el.style.left = p.l; el.style.top = p.t;
+el.style.width = p.w; el.style.height = p.h;
+    el.classList.remove('maxed');
+    wins[id].maxed = false;
+} else {
+    winPrev[id] = { l:el.style.left, t:el.style.top, w:el.style.width, h:el.style.height };
+    el.classList.add('maxed');
+    wins[id].maxed = true;
+  }
+}
+
+
+
+
+
+
+
 
 document.addEventListener('mousemove', e => {
   if (!drag.el) return;
