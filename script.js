@@ -425,3 +425,35 @@ function bsod() {
 
 // open my computer by default
 show('win-comp');
+
+
+
+
+
+function openShutdown() {
+  const d = document.getElementById('shutdown-dlg');
+  d.style.display = 'flex';
+}
+
+function closeShutdown() {
+  document.getElementById('shutdown-dlg').style.display = 'none';
+}
+
+function doShutdown() {
+  const opt = document.querySelector('input[name="sdopt"]:checked')?.value;
+  closeShutdown();
+  const s = document.createElement('div');
+  s.style.cssText = 'position:fixed;inset:0;background:#000;z-index:999999;display:flex;align-items:center;justify-content:center;color:#c0c0c0;font-family:"Courier New",monospace;font-size:14px;flex-direction:column;gap:16px;';
+  if (opt === 'restart') {
+    s.innerHTML = '<div>Windows is restarting...</div><div style="font-size:11px;color:#808080;">Please wait.</div>';
+    document.body.appendChild(s);
+    setTimeout(() => location.reload(), 2500);
+  } else if (opt === 'standby') {
+    s.innerHTML = '<div style="font-size:11px;color:#404040;">Click anywhere to wake.</div>';
+    document.body.appendChild(s);
+    s.addEventListener('click', () => s.remove());
+  } else {
+    s.innerHTML = '<div>It is now safe to turn off your computer.</div>';
+    document.body.appendChild(s);
+  }
+}

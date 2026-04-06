@@ -256,11 +256,6 @@
       </div>
     </span>
   </div>
-
-      
-
-
-</span>
   <div style="padding:6px;">
     <div class="sunk" style="background:#fff;min-height:110px;display:flex;align-items:center;justify-content:center;color:#808080;">The Recycle Bin is empty.</div>
   </div>
@@ -287,6 +282,36 @@
   </div>
 </div>
 
+<!-- shutdown dialog -->
+<div id="shutdown-dlg" style="display:none;position:fixed;inset:0;z-index:9500;align-items:center;justify-content:center;">
+  <div style="background:#c0c0c0;border:2px solid;border-color:#dfdfdf #404040 #404040 #dfdfdf;width:320px;">
+    <div class="tbar">
+      <div style="pointer-events:none;">Shut Down Windows</div>
+      <div class="wbtns"><div class="wbtn" onclick="closeShutdown()">✕</div></div>
+    </div>
+    <div style="padding:16px;display:flex;gap:12px;align-items:flex-start;">
+      <div style="font-size:32px;flex-shrink:0;">?</div>
+      <div>
+        <div style="font-weight:bold;margin-bottom:10px;">What do you want the computer to do?</div>
+        <label style="display:flex;align-items:center;gap:6px;margin-bottom:4px;cursor:pointer;">
+          <input type="radio" name="sdopt" value="shutdown" checked> Shut down
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;margin-bottom:4px;cursor:pointer;">
+          <input type="radio" name="sdopt" value="restart"> Restart
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+          <input type="radio" name="sdopt" value="standby"> Stand by
+        </label>
+      </div>
+    </div>
+    <div style="border-top:1px solid #808080;padding:8px 12px;display:flex;justify-content:flex-end;gap:6px;">
+      <button class="wbtn" style="width:75px;height:23px;font-size:11px;font-family:Tahoma,sans-serif;" onclick="doShutdown()">OK</button>
+      <button class="wbtn" style="width:75px;height:23px;font-size:11px;font-family:Tahoma,sans-serif;" onclick="closeShutdown()">Cancel</button>
+      <button class="wbtn" style="width:75px;height:23px;font-size:11px;font-family:Tahoma,sans-serif;">Help</button>
+    </div>
+  </div>
+</div>
+
 <!-- taskbar -->
 <div id="taskbar">
   <button id="startbtn" onclick="toggleStart()">Start</button>
@@ -303,7 +328,8 @@
     <div class="sm-row" onclick="show('win-comp');closeStart()">My Computer</div>
     <div class="sm-row" onclick="show('win-log');closeStart()">System Log</div>
     <div class="sm-sep"></div>
-    <div class="sm-row" style="color:#800000" onclick="closeStart()">Shut Down...</div>
+
+    <div class="sm-row" style="color:#800000" onclick="openShutdown();closeStart()">Shut Down...</div>
   </div>
 </div>
 
