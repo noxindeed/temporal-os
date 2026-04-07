@@ -232,6 +232,28 @@ body {
 .exp-item:hover { background: #000080; color: white; }
 .exp-item svg { width: 32px; height: 32px; image-rendering: pixelated; }
 
+/* Icon size variants */
+.exp-body.icon-small .exp-item {
+  width: 48px;
+}
+.exp-body.icon-small .exp-item svg {
+  width: 16px; height: 16px;
+}
+
+.exp-body.icon-medium .exp-item {
+  width: 62px;
+}
+.exp-body.icon-medium .exp-item svg {
+  width: 32px; height: 32px;
+}
+
+.exp-body.icon-large .exp-item {
+  width: 80px;
+}
+.exp-body.icon-large .exp-item svg {
+  width: 48px; height: 48px;
+}
+
 .log-body {
   background: #000; color: #0d0; font-family: 'Courier New', monospace;
   font-size: 11px; padding: 6px; min-height: 0px; overflow-y: auto; line-height: 1.5;

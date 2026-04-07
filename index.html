@@ -107,8 +107,9 @@
     </span>
     <span onclick="toggleMenu('dd-comp-view',event)">View
       <div class="dropdown" id="dd-comp-view">
-        <div class="ditem" onclick="closeMenus()">Large Icons</div>
-        <div class="ditem" onclick="closeMenus()">Small Icons</div>
+        <div class="ditem" onclick="setCompIconSize('large');closeMenus()">Large Icons</div>
+        <div class="ditem" onclick="setCompIconSize('medium');closeMenus()">Medium Icons</div>
+        <div class="ditem" onclick="setCompIconSize('small');closeMenus()">Small Icons</div>
         <div class="ditem" onclick="closeMenus()">List</div>
         <div class="ditem" onclick="closeMenus()">Details</div>
       </div>
@@ -127,11 +128,11 @@
         <span data-orig="3½ Floppy (A:)">3½ Floppy (A:)</span>
       </div>
       <div class="exp-item">
-        <svg viewBox="0 0 16 16"><ellipse cx="8" cy="8" r="7" fill="#505050"/><ellipse cx="8" cy="8" r="5" fill="#707070"/><ellipse cx="8" cy="8" r="2" fill="#303030"/><ellipse cx="8" cy="8" r="1" fill="#b0b0b0"/></svg>
+        <svg viewBox="0 0 16 16"><rect x="1" y="3" width="14" height="10" fill="#505050"/><rect x="2" y="4" width="12" height="8" fill="#707070"/><rect x="3" y="5" width="2" height="1" fill="#909090"/><rect x="6" y="5" width="2" height="1" fill="#909090"/><rect x="9" y="5" width="2" height="1" fill="#909090"/><rect x="12" y="5" width="1" height="1" fill="#909090"/><circle cx="8" cy="10" r="1.5" fill="#303030"/></svg>
         <span data-orig="Local Disk (C:)">Local Disk (C:)</span>
       </div>
       <div class="exp-item">
-        <svg viewBox="0 0 16 16"><ellipse cx="8" cy="8" r="7" fill="#202020"/><ellipse cx="8" cy="8" r="5" fill="#404040"/><ellipse cx="8" cy="8" r="2" fill="#181818"/></svg>
+        <svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#d0a000"/><circle cx="8" cy="8" r="6" fill="#e0b000"/><circle cx="8" cy="8" r="4" fill="#f0c000"/><circle cx="8" cy="8" r="3" fill="#202020"/><circle cx="8" cy="8" r="1" fill="#505050"/></svg>
         <span data-orig="CD-ROM (D:)">CD-ROM (D:)</span>
       </div>
       <div class="exp-item">

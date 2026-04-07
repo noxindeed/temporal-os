@@ -127,6 +127,19 @@ function refocus() {
 
 let wordWrap = false;
 
+function setCompIconSize(size) {
+  const expBody = document.querySelector('#win-comp .exp-body');
+  expBody.classList.remove('icon-small', 'icon-medium', 'icon-large');
+  
+  if (size === 'small') {
+    expBody.classList.add('icon-small');
+  } else if (size === 'medium') {
+    expBody.classList.add('icon-medium');
+  } else if (size === 'large') {
+    expBody.classList.add('icon-large');
+  }
+}
+
 function toggleWrap() {
   wordWrap = !wordWrap;
   document.getElementById('notepad').style.whiteSpace = wordWrap ? 'pre-wrap' : 'pre';
