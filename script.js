@@ -52,6 +52,23 @@ let dead = false;
 let drag = { el:null, sx:0, sy:0, ox:0, oy:0 };
 let wins = {};
 
+const pong = {
+  ready: false,
+  running: false,
+  score: 0,
+  paddleX: 0,
+  paddleW: 72,
+  paddleH: 8,
+  ballX: 0,
+  ballY: 0,
+  ballVX: 2.4,
+  ballVY: -2.8,
+  ballS: 6,
+  keyLeft: false,
+  keyRight: false,
+  lastTs: 0,
+};
+
 //  init 
 
 document.getElementById('notepad').textContent = JOURNAL;
@@ -87,6 +104,7 @@ function show(id) {
   focus(id);
  
   if (!el._drag) makedraggable(el);
+  if (id === 'win-pong') initPong();
 }
 
 function hide(id) {
@@ -224,7 +242,7 @@ document.addEventListener('click', () => closeMenus());
 
 // taskbar 
 
-const tlabels = { 'win-comp':'My Computer', 'win-notes':'journal.txt', 'win-log':'system.log', 'win-bin':'Recycle Bin' };
+const tlabels = { 'win-comp':'My Computer', 'win-notes':'journal.txt', 'win-log':'system.log', 'win-bin':'Recycle Bin', 'win-pong':'PONG.EXE' };
 
 function addtask(id) {
   const b = document.createElement('div');
@@ -472,4 +490,154 @@ function doShutdown() {
     s.innerHTML = '<div>It is now safe to turn off your computer.</div>';
     document.body.appendChild(s);
   }
+}
+
+
+
+function initPong() {
+  if (pong.ready) return;
+  const cv = document.getElementById('pong-canvas');
+  const wrap = document.querySelector('#win-pong .pong-body');
+
+  if (!cv || !wrap) return;
+  const resizePong = () => {
+    const r = wrap.getBoundingClientRect();
+    cv.width = Math.max(260, Math.floor(r.width));
+    cv.height = Math.max(150, Math.floor(r.height));
+    pong.paddleX = Math.max(0, Math.min(cv.width - pong.paddleW, pong.paddleX || (cv.width - pong.paddleW) / 2));
+    if (!pong.running) drawPong();
+  };
+
+  window.addEventListener('resize', resizePong);
+  cv.addEventListener('mousemove', e => {
+    const r = cv.getBoundingClientRect();
+    const relX = e.clientX - r.left;
+    pong.paddleX = Math.max(0, Math.min(cv.width - pong.paddleW, relX - pong.paddleW / 2));
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft') pong.keyLeft = true;
+    if (e.key === 'ArrowRight') pong.keyRight = true;
+  });
+
+  document.addEventListener('keyup', e => {
+    if (e.key === 'ArrowLeft') pong.keyLeft = false;
+    if (e.key === 'ArrowRight') pong.keyRight = false;
+  });
+
+  pong.ready = true;
+  resizePong();
+  startPongGame();
+  requestAnimationFrame(pongLoop);
+}
+
+function startPongGame() {
+  initPong();
+  const cv = document.getElementById('pong-canvas');
+  if (!cv) return;
+
+  pong.running = true;
+  pong.score = 0;
+  pong.paddleX = (cv.width - pong.paddleW) / 2;
+  pong.ballX = cv.width / 2;
+  pong.ballY = cv.height - 34;
+  pong.ballVX = (Math.random() > 0.5 ? 1 : -1) * 2.4;
+  pong.ballVY = -2.8;
+  pong.lastTs = 0;
+
+  document.getElementById('pong-score').textContent = '0';
+  document.getElementById('pong-over').style.display = 'none';
+  drawPong();
+}
+
+function gameOverPong() {
+  pong.running = false;
+  document.getElementById('pong-over').style.display = 'flex';
+}
+
+function drawPong() {
+  const cv = document.getElementById('pong-canvas');
+  if (!cv) return;
+  const wrap = document.querySelector('#win-pong .pong-body');
+  if (wrap) {
+    const w = Math.max(260, Math.floor(wrap.clientWidth));
+    const h = Math.max(150, Math.floor(wrap.clientHeight));
+    if (cv.width !== w || cv.height !== h) {
+      cv.width = w;
+      cv.height = h;
+      pong.paddleX = Math.max(0, Math.min(cv.width - pong.paddleW, pong.paddleX));
+      pong.ballX = Math.max(0, Math.min(cv.width - pong.ballS, pong.ballX));
+      pong.ballY = Math.max(0, Math.min(cv.height - pong.ballS, pong.ballY));
+    }
+  }
+  const ctx = cv.getContext('2d');
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, cv.width, cv.height);
+
+  ctx.fillStyle = '#2c2c2c';
+  for (let y = 0; y < cv.height; y += 12) {
+    ctx.fillRect(cv.width / 2 - 1, y, 2, 6);
+  }
+
+  const paddleY = cv.height - 14;
+  ctx.fillStyle = '#f0f0f0';
+  ctx.fillRect(Math.round(pong.paddleX), paddleY, pong.paddleW, pong.paddleH);
+  ctx.fillRect(Math.round(pong.ballX), Math.round(pong.ballY), pong.ballS, pong.ballS);
+}
+
+function pongLoop(ts) {
+  const cv = document.getElementById('pong-canvas');
+  if (!cv) {
+    requestAnimationFrame(pongLoop);
+    return;
+  }
+
+  if (pong.lastTs === 0) pong.lastTs = ts;
+  const dt = Math.min(2, (ts - pong.lastTs) / 16.67);
+  pong.lastTs = ts;
+
+  if (pong.running) {
+    if (pong.keyLeft) pong.paddleX -= 5 * dt;
+    if (pong.keyRight) pong.paddleX += 5 * dt;
+    pong.paddleX = Math.max(0, Math.min(cv.width - pong.paddleW, pong.paddleX));
+
+    pong.ballX += pong.ballVX * dt;
+    pong.ballY += pong.ballVY * dt;
+
+    if (pong.ballX <= 0) {
+      pong.ballX = 0;
+      pong.ballVX *= -1;
+    }
+    if (pong.ballX + pong.ballS >= cv.width) {
+      pong.ballX = cv.width - pong.ballS;
+      pong.ballVX *= -1;
+    }
+    if (pong.ballY <= 0) {
+      pong.ballY = 0;
+      pong.ballVY *= -1;
+    }
+
+    const paddleY = cv.height - 14;
+    if (
+      pong.ballY + pong.ballS >= paddleY &&
+      pong.ballY + pong.ballS <= paddleY + pong.paddleH &&
+      pong.ballX + pong.ballS >= pong.paddleX &&
+      pong.ballX <= pong.paddleX + pong.paddleW &&
+      pong.ballVY > 0
+    ) {
+      pong.ballY = paddleY - pong.ballS;
+      const hit = ((pong.ballX + pong.ballS / 2) - (pong.paddleX + pong.paddleW / 2)) / (pong.paddleW / 2);
+      pong.ballVX = 3.6 * hit;
+      pong.ballVY = -Math.abs(pong.ballVY) - 0.08;
+      pong.score += 1;
+      document.getElementById('pong-score').textContent = String(pong.score);
+    }
+
+    if (pong.ballY > cv.height) {
+      gameOverPong();
+    }
+  }
+
+  drawPong();
+  requestAnimationFrame(pongLoop);
 }

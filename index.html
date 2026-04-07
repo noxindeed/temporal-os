@@ -77,6 +77,17 @@
     <span data-orig="system.log">system.log</span>
   </div>
 
+  <div class="icon" style="left:16px;top:484px" ondblclick="show('win-pong')">
+    <svg viewBox="0 0 16 16">
+      <rect x="1" y="1" width="14" height="14" fill="#000"/>
+      <rect x="2" y="2" width="12" height="12" fill="#001010"/>
+      <rect x="3" y="3" width="1" height="10" fill="#e0e0e0"/>
+      <rect x="12" y="5" width="1" height="6" fill="#e0e0e0"/>
+      <rect x="7" y="7" width="2" height="2" fill="#fff"/>
+    </svg>
+    <span data-orig="PONG.EXE">PONG.EXE</span>
+  </div>
+
 </div>
 
 <!-- my computer -->
@@ -263,6 +274,44 @@
   <div class="stbar"><div class="stpanel">0 object(s)</div></div>
 </div>
 
+<!-- pong -->
+<div class="win" id="win-pong" style="left:360px;top:120px;width:460px;">
+  <div class="tbar">
+    <div style="display:flex;align-items:center;gap:4px;overflow:hidden;white-space:nowrap;pointer-events:none;">
+      <svg width="14" height="14" viewBox="0 0 16 16" style="image-rendering:pixelated;flex-shrink:0"><rect x="1" y="1" width="14" height="14" fill="#000"/><rect x="2" y="2" width="12" height="12" fill="#001010"/><rect x="3" y="3" width="1" height="10" fill="#e0e0e0"/><rect x="12" y="5" width="1" height="6" fill="#e0e0e0"/><rect x="7" y="7" width="2" height="2" fill="#fff"/></svg>
+      <span data-orig="PONG.EXE">PONG.EXE</span>
+    </div>
+    <div class="wbtns">
+      <div class="wbtn" onclick="min('win-pong')">_</div>
+      <div class="wbtn" style="font-size:9px" onclick="maximize('win-pong')">□</div>
+      <div class="wbtn" onclick="hide('win-pong')">✕</div>
+    </div>
+  </div>
+  <div class="mbar">
+    <span onclick="toggleMenu('dd-pong-game',event)">Game
+      <div class="dropdown" id="dd-pong-game">
+        <div class="ditem" onclick="startPongGame();closeMenus()">New Game</div>
+        <div class="dsep"></div>
+        <div class="ditem" onclick="hide('win-pong');closeMenus()">Exit</div>
+      </div>
+    </span>
+  </div>
+  <div style="padding:6px;display:flex;flex-direction:column;flex:1;min-height:0;">
+    <div class="pong-body sunk">
+      <canvas id="pong-canvas" width="420" height="240" aria-label="Pong game area"></canvas>
+      <div id="pong-over" class="pong-over" style="display:none;">
+        <div class="pong-over-title" data-orig="GAME OVER">GAME OVER</div>
+        <div class="pong-over-sub" data-orig="You missed the ball.">You missed the ball.</div>
+        <button class="pong-btn" onclick="startPongGame()">Start Again</button>
+      </div>
+    </div>
+  </div>
+  <div class="stbar">
+    <div class="stpanel">Score: <span id="pong-score">0</span></div>
+    <div class="stpanel" style="flex:0;white-space:nowrap;">Mouse or Left/Right</div>
+  </div>
+</div>
+
 <!-- error dialog -->
 <div class="win" id="errdlg" style="left:260px;top:140px;width:340px;">
   <div class="tbar">
@@ -328,6 +377,7 @@
     <div class="sm-row" onclick="show('win-notes');closeStart()">Notepad</div>
     <div class="sm-row" onclick="show('win-comp');closeStart()">My Computer</div>
     <div class="sm-row" onclick="show('win-log');closeStart()">System Log</div>
+    <div class="sm-row" onclick="show('win-pong');closeStart()">Pong</div>
     <div class="sm-sep"></div>
 
     <div class="sm-row" style="color:#800000" onclick="openShutdown();closeStart()">Shut Down...</div>
