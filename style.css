@@ -61,11 +61,11 @@ body {
   flex: 0 0 auto;
 }
 .win.maxed > div:not(.tbar):not(.mbar):not(.stbar) {
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  padding: 0;
+  flex: 1 ;
+  min-height: 0 ;
+  display: flex ;
+  flex-direction: column ;
+  padding: 0 ;
 }
 .win.maxed .exp-body,
 .win.maxed .notes-body,

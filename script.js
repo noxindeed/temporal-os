@@ -75,7 +75,8 @@ clocktick();
 
 function show(id) {
   const el = document.getElementById(id);
-  el.style.display = 'block';
+  const isMaxed = !!wins[id]?.maxed || el.classList.contains('maxed');
+  el.style.display = isMaxed ? 'flex' : 'block';
   el.classList.add('open');
   front(el);
   if (!wins[id]) { wins[id] = { min:false }; addtask(id); }
@@ -166,6 +167,7 @@ function maximize(id) {
     el.style.left = p.l; el.style.top = p.t;
     el.style.width = p.w; el.style.height = p.h;
     el.classList.remove('maxed');
+    el.style.display = 'block';
     wins[id].maxed = false;
   } else {
     // read actual position before clearing anything
@@ -176,6 +178,7 @@ function maximize(id) {
     };
     el.classList.add('maxed');
     el.style.left = ''; el.style.top = ''; el.style.width = ''; el.style.height = '';
+    el.style.display = 'flex';
     wins[id].maxed = true;
   }
 }
