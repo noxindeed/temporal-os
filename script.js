@@ -492,6 +492,19 @@ function doShutdown() {
   }
 }
 
+function getPongDecay() {
+  const p = Math.max(0, Math.min(100, pct));
+  const paddleScale = p <= 50 ? 1 : Math.max(0.55, 1 - ((p - 50) / 50) * 0.45);
+  const inputLag = p <= 80 ? 0 : ((p - 80) / 20) * 0.45;
+  const ballJitter = p <= 65 ? 0 : ((p - 65) / 35) * 0.9;
+
+  return {
+    paddleW: Math.max(36, Math.round(pong.paddleW * paddleScale)),
+    inputLag,
+    ballJitter,
+  };
+}
+
 
 
 function initPong() {
@@ -510,9 +523,13 @@ function initPong() {
 
   window.addEventListener('resize', resizePong);
   cv.addEventListener('mousemove', e => {
+    const decay = getPongDecay();
+    if (decay.inputLag > 0 && Math.random() < decay.inputLag * 0.45) return;
+
     const r = cv.getBoundingClientRect();
     const relX = e.clientX - r.left;
-    pong.paddleX = Math.max(0, Math.min(cv.width - pong.paddleW, relX - pong.paddleW / 2));
+    const wobble = (Math.random() - 0.5) * decay.inputLag * 10;
+    pong.paddleX = Math.max(0, Math.min(cv.width - decay.paddleW, relX - decay.paddleW / 2 + wobble));
   });
 
   document.addEventListener('keydown', e => {
@@ -558,6 +575,7 @@ function gameOverPong() {
 function drawPong() {
   const cv = document.getElementById('pong-canvas');
   if (!cv) return;
+  const decay = getPongDecay();
   const wrap = document.querySelector('#win-pong .pong-body');
   if (wrap) {
     const w = Math.max(260, Math.floor(wrap.clientWidth));
@@ -581,7 +599,7 @@ function drawPong() {
 
   const paddleY = cv.height - 14;
   ctx.fillStyle = '#f0f0f0';
-  ctx.fillRect(Math.round(pong.paddleX), paddleY, pong.paddleW, pong.paddleH);
+  ctx.fillRect(Math.round(pong.paddleX), paddleY, decay.paddleW, pong.paddleH);
   ctx.fillRect(Math.round(pong.ballX), Math.round(pong.ballY), pong.ballS, pong.ballS);
 }
 
@@ -597,12 +615,21 @@ function pongLoop(ts) {
   pong.lastTs = ts;
 
   if (pong.running) {
-    if (pong.keyLeft) pong.paddleX -= 5 * dt;
-    if (pong.keyRight) pong.paddleX += 5 * dt;
-    pong.paddleX = Math.max(0, Math.min(cv.width - pong.paddleW, pong.paddleX));
+    const decay = getPongDecay();
+
+    if (pong.keyLeft && Math.random() > decay.inputLag) pong.paddleX -= 5 * dt;
+    if (pong.keyRight && Math.random() > decay.inputLag) pong.paddleX += 5 * dt;
+    if (decay.inputLag > 0 && Math.random() < decay.inputLag * 0.06) {
+      pong.paddleX += (Math.random() - 0.5) * 10;
+    }
+    pong.paddleX = Math.max(0, Math.min(cv.width - decay.paddleW, pong.paddleX));
 
     pong.ballX += pong.ballVX * dt;
     pong.ballY += pong.ballVY * dt;
+    if (decay.ballJitter > 0) {
+      pong.ballX += (Math.random() - 0.5) * decay.ballJitter * dt;
+      pong.ballY += (Math.random() - 0.5) * decay.ballJitter * 0.5 * dt;
+    }
 
     if (pong.ballX <= 0) {
       pong.ballX = 0;
@@ -622,11 +649,11 @@ function pongLoop(ts) {
       pong.ballY + pong.ballS >= paddleY &&
       pong.ballY + pong.ballS <= paddleY + pong.paddleH &&
       pong.ballX + pong.ballS >= pong.paddleX &&
-      pong.ballX <= pong.paddleX + pong.paddleW &&
+      pong.ballX <= pong.paddleX + decay.paddleW &&
       pong.ballVY > 0
     ) {
       pong.ballY = paddleY - pong.ballS;
-      const hit = ((pong.ballX + pong.ballS / 2) - (pong.paddleX + pong.paddleW / 2)) / (pong.paddleW / 2);
+      const hit = ((pong.ballX + pong.ballS / 2) - (pong.paddleX + decay.paddleW / 2)) / (decay.paddleW / 2);
       pong.ballVX = 3.6 * hit;
       pong.ballVY = -Math.abs(pong.ballVY) - 0.08;
       pong.score += 1;
